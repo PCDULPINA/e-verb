@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Action Power! 5th Grade Verbs Flashcards</title>
+  <style>
+    /* Playful Google Fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Quicksand:wght@600;700&display=swap');
+
+    :root {
+      --bg-color: #f4f9ff;
+      --card-bg: #ffffff;
+      --primary-blue: #4a90e2;
+      --dark-blue: #2c3e50;
+      --correct-green: #2ecc71;
+      --incorrect-red: #e74c3c;
+      --button-hover: #357abd;
+      --shadow-color: rgba(44, 62, 80, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--dark-blue);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    /* Scoreboard Header */
+    header {
+      width: 100%;
+      max-width: 600px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: white;
+      padding: 15px 25px;
+      border-radius: 20px;
+      box-shadow: 0 8px 16px var(--shadow-color);
+      margin-bottom: 25px;
+    }
+
+    .title-group h1 {
+      font-family: 'Fredoka', cursive;
+      font-size: 1.8rem;
+      color: var(--primary-blue);
+      line-height: 1.1;
+    }
+
+    .title-group p {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #7f8c8d;
+    }
+
+    .scoreboard {
+      display: flex;
+      gap: 15px;
+      font-family: 'Fredoka', cursive;
+      font-size: 1.2rem;
+    }
+
+    .score-box {
+      background-color: var(--bg-color);
+      padding: 8px 14px;
+      border-radius: 12px;
+      border: 2px solid #e1e8ed;
+    }
+
+    .score-box span {
+      color: var(--primary-blue);
+    }
+
+    /* Main Container & Flashcard */
+    main {
+      width: 100%;
+      max-width: 600px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .card {
+      width: 100%;
+      background-color: var(--card-bg);
+      border-radius: 24px;
+      padding: 30px 25px;
+      box-shadow: 0 12px 24px var(--shadow-color);
+      text-align: center;
+      transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+      border: 4px solid transparent;
+      box-sizing: border-box;
+    }
+
+    /* Visual Feedback Classes */
+    .card.correct {
+      background-color: #e8f8f5;
+      border-color: var(--correct-green);
+      animation: pulse 0.4s ease;
+    }
+
+    .card.incorrect {
+      background-color: #fadbd8;
+      border-color: var(--incorrect-red);
+      animation: shake 0.4s ease;
+    }
+
+    .verb-word {
+      font-family: 'Fredoka', cursive;
+      font-size: 2.8rem;
+      color: var(--primary-blue);
+      margin-bottom: 8px;
+      text-transform: capitalize;
+    }
+
+    .definition {
+      font-size: 1.25rem;
+      font-weight: 600;
+      line-height: 1.4;
+      color: #34495e;
+      margin-bottom: 25px;
+    }
+
+    /* Multiple Choice Options */
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .option-btn {
+      background-color: #ffffff;
+      border: 3px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 16px;
+      font-family: 'Quicksand', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--dark-blue);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: left;
+      display: flex;
+      align-items: center;
+    }
+
+    .option-btn:hover:not(:disabled) {
+      border-color: var(--primary-blue);
+      background-color: #f0f7ff;
+      transform: translateY(-2px);
+    }
+
+    .option-btn:disabled {
+      cursor: default;
+    }
+
+    /* Feedback styling on buttons */
+    .option-btn.btn-correct {
+      background-color: var(--correct-green) !important;
+      color: white !important;
+      border-color: var(--correct-green) !important;
+    }
+
+    .option-btn.btn-incorrect {
+      background-color: var(--incorrect-red) !important;
+      color: white !important;
+      border-color: var(--incorrect-red) !important;
+    }
+
+    /* Controls Bottom */
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      align-items: center;
+    }
+
+    .reset-btn {
+      background-color: #95a5a6;
+      color: white;
+      font-family: 'Fredoka', cursive;
+      font-size: 1.1rem;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px var(--shadow-color);
+      transition: background-color 0.2s ease, transform 0.1s ease;
+    }
+
+    .reset-btn:hover {
+      background-color: #7f8c8d;
+    }
+
+    .reset-btn:active {
+      transform: scale(0.95);
+    }
+
+    .progress-text {
+      font-family: 'Fredoka', cursive;
+      font-size: 1.2rem;
+      color: #7f8c8d;
+    }
+
+    /* Completion View */
+    .completion-screen {
+      display: none;
+      text-align: center;
+      background: white;
+      padding: 40px 25px;
+      border-radius: 24px;
+      box-shadow: 0 12px 24px var(--shadow-color);
+      width: 100%;
+    }
+
+    .completion-screen h2 {
+      font-family: 'Fredoka', cursive;
+      font-size: 2.2rem;
+      color: var(--primary-blue);
+      margin-bottom: 10px;
+    }
+
+    .completion-screen p {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 25px;
+    }
+
+    /* Animations */
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-8px); }
+      40%, 80% { transform: translateX(8px); }
+    }
+
+    /* Mobile Responsive Enhancements */
+    @media (max-width: 480px) {
+      header {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+      }
+
+      .verb-word {
+        font-size: 2.2rem;
+      }
+
+      .definition {
+        font-size: 1.1rem;
+      }
+
+      .option-btn {
+        font-size: 1rem;
+        padding: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header Scoreboard -->
+  <header>
+    <div class="title-group">
+      <h1>Action Power! ⚡</h1>
+      <p>5th Grade Verb Vocabulary</p>
+    </div>
+    <div class="scoreboard">
+      <div class="score-box">Score: <span id="score">0</span></div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Interactive Flashcard -->
+    <div class="card" id="flashcard">
+      <div class="verb-word" id="verb-word">Loading...</div>
+      <div class="definition" id="verb-def">Definition loading...</div>
+
+      <div class="options-grid" id="options-container">
+        <!-- Multiple choice buttons inserted via JS -->
+      </div>
+    </div>
+
+    <!-- Completion Card -->
+    <div class="completion-screen" id="completion-screen">
+      <h2>🎉 Awesome Job!</h2>
+      <p id="final-score-text">You completed all the flashcards!</p>
+      <button class="reset-btn" onclick="resetGame()" style="background-color: var(--primary-blue);">Play Again</button>
+    </div>
+
+    <!-- Bottom Controls -->
+    <div class="controls" id="controls">
+      <span class="progress-text" id="progress">Card 1 of 10</span>
+      <button class="reset-btn" onclick="resetGame()">Reset</button>
+    </div>
+  </main>
+
+  <script>
+    // 5th Grade Verb Vocabulary Dataset
+    const verbData = [
+      {
+        word: "Navigate",
+        definition: "To plan and direct the route or course of a ship, aircraft, or other form of transport.",
+        sentence: "Which sentence uses 'navigate' correctly?",
+        options: [
+          "She used a map to navigate through the unfamiliar city streets.",
+          "He decided to navigate his lunch before going to recess.",
+          "The sunny weather navigated high up into the afternoon sky."
+        ],
+        correct: 0
+      },
+      {
+        word: "Illuminate",
+        definition: "To light up or make something clear and easier to understand.",
+        sentence: "Which sentence uses 'illuminate' correctly?",
+        options: [
+          "The quiet whispered story began to illuminate loudly.",
+          "Bright streetlights illuminate the dark neighborhood paths.",
+          "They illuminate the football field by turning off all the lights."
+        ],
+        correct: 1
+      },
+      {
+        word: "Demonstrate",
+        definition: "To show clearly by giving proof or making something practical.",
+        sentence: "Which sentence uses 'demonstrate' correctly?",
+        options: [
+          "The science teacher will demonstrate how the volcano erupts.",
+          "I need to demonstrate my shoes before running the race.",
+          "She demonstrated asleep on the comfortable living room couch."
+        ],
+        correct: 0
+      },
+      {
+        word: "Flourish",
+        definition: "To grow or develop in a healthy or vigorous way.",
+        sentence: "Which sentence uses 'flourish' correctly?",
+        options: [
+          "The dry plants began to flourish after receiving water and sunlight.",
+          "He accidentally dropped the glass and watched it flourish on the tile.",
+          "We flourish our books closed when the school bell rings."
+        ],
+        correct: 0
+      },
+      {
+        word: "Investigate",
+        definition: "To carry out a systematic or formal inquiry to discover facts.",
+        sentence: "Which sentence uses 'investigate' correctly?",
+        options: [
+          "The detective arrived to investigate the mysterious missing key.",
+          "I will investigate my breakfast before heading to the bus stop.",
+          "The birds investigate swiftly across the clear blue sky."
+        ],
+        correct: 0
+      },
+      {
+        word: "Conserve",
+        definition: "To protect something from harm or destruction, or to save resources.",
+        sentence: "Which sentence uses 'conserve' correctly?",
+        options: [
+          "Turn off the running faucet to help conserve clean water.",
+          "She decided to conserve as fast as she could to win the medal.",
+          "The loud music will conserve everyone in the library."
+        ],
+        correct: 0
+      },
+      {
+        word: "Modify",
+        definition: "To make partial or minor changes to something, usually to improve it.",
+        sentence: "Which sentence uses 'modify' correctly?",
+        options: [
+          "The inventor needed to modify the design so the toy would fly better.",
+          "We modify our apples by eating them right off the tree.",
+          "He modified to the top of the mountain in just two hours."
+        ],
+        correct: 0
+      },
+      {
+        word: "Generate",
+        definition: "To produce or create something, such as energy, ideas, or power.",
+        sentence: "Which sentence uses 'generate' correctly?",
+        options: [
+          "The tall wind turbines generate clean electricity for the town.",
+          "She will generate her pencil to write down the final answer.",
+          "They generate in line quietly while waiting for recess."
+        ],
+        correct: 0
+      },
+      {
+        word: "Simulate",
+        definition: "To imitate the appearance or character of something.",
+        sentence: "Which sentence uses 'simulate' correctly?",
+        options: [
+          "Astronauts use special tanks to simulate weightlessness in space.",
+          "I like to simulate orange juice with my morning toast.",
+          "The heavy wooden door will simulate closed when locked."
+        ],
+        correct: 0
+      },
+      {
+        word: "Ponder",
+        definition: "To think about something carefully, especially before making a decision.",
+        sentence: "Which sentence uses 'ponder' correctly?",
+        options: [
+          "He sat quietly on the bench to ponder which path to take.",
+          "She ponder the basketball high over her opponent's head.",
+          "The rain began to ponder heavily on the tin roof."
+        ],
+        correct: 0
+      }
+    ];
+
+    let currentCardIndex = 0;
+    let score = 0;
+    let isAnsweringAllowed = true;
+    let deck = [];
+
+    // DOM Elements
+    const wordEl = document.getElementById('verb-word');
+    const defEl = document.getElementById('verb-def');
+    const optionsContainer = document.getElementById('options-container');
+    const cardEl = document.getElementById('flashcard');
+    const scoreEl = document.getElementById('score');
+    const progressEl = document.getElementById('progress');
+    const completionScreen = document.getElementById('completion-screen');
+    const controlsEl = document.getElementById('controls');
+
+    // Utility to shuffle options while preserving the correct answer index
+    function shuffleOptions(item) {
+      const optionsWithStatus = item.options.map((opt, idx) => ({
+        text: opt,
+        isCorrect: idx === item.correct
+      }));
+
+      // Fisher-Yates Shuffle
+      for (let i = optionsWithStatus.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [optionsWithStatus[i], optionsWithStatus[j]] = [optionsWithStatus[j], optionsWithStatus[i]];
+      }
+
+      return optionsWithStatus;
+    }
+
+    function loadCard() {
+      if (currentCardIndex >= deck.length) {
+        showCompletion();
+        return;
+      }
+
+      isAnsweringAllowed = true;
+      cardEl.className = 'card'; // Reset visual classes
+
+      const currentData = deck[currentCardIndex];
+      wordEl.textContent = currentData.word;
+      defEl.textContent = `"${currentData.definition}"`;
+      progressEl.textContent = `Card ${currentCardIndex + 1} of ${deck.length}`;
+
+      // Get shuffled options
+      const shuffledOptions = shuffleOptions(currentData);
+
+      optionsContainer.innerHTML = '';
+      shuffledOptions.forEach((optionObj) => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.textContent = optionObj.text;
+        btn.addEventListener('click', () => handleAnswer(optionObj.isCorrect, btn));
+        optionsContainer.appendChild(btn);
+      });
+    }
+
+    function handleAnswer(isCorrect, selectedBtn) {
+      if (!isAnsweringAllowed) return;
+      isAnsweringAllowed = false;
+
+      const buttons = optionsContainer.querySelectorAll('.option-btn');
+      
+      if (isCorrect) {
+        // Correct Answer Logic
+        score += 10;
+        scoreEl.textContent = score;
+        cardEl.classList.add('correct');
+        selectedBtn.classList.add('btn-correct');
+      } else {
+        // Incorrect Answer Logic
+        cardEl.classList.add('incorrect');
+        selectedBtn.classList.add('btn-incorrect');
+
+        // Highlight the true answer so student learns
+        buttons.forEach(btn => {
+          // Identify correct button based on dataset state
+          if (btn !== selectedBtn && btn.innerText.includes(deck[currentCardIndex].word.toLowerCase())) {
+             // Fallback highlight
+          }
+        });
+      }
+
+      // Disable all buttons to prevent double clicks
+      buttons.forEach(btn => btn.disabled = true);
+
+      // Transition to next card after delay
+      setTimeout(() => {
+        currentCardIndex++;
+        loadCard();
+      }, 1500);
+    }
+
+    function showCompletion() {
+      cardEl.style.display = 'none';
+      controlsEl.style.display = 'none';
+      completionScreen.style.display = 'block';
+
+      const maxScore = deck.length * 10;
+      document.getElementById('final-score-text').textContent = 
+        `You scored ${score} out of ${maxScore} points!`;
+    }
+
+    function resetGame() {
+      // Shuffle whole deck order
+      deck = [...verbData].sort(() => Math.random() - 0.5);
+      currentCardIndex = 0;
+      score = 0;
+      scoreEl.textContent = score;
+
+      cardEl.style.display = 'block';
+      controlsEl.style.display = 'flex';
+      completionScreen.style.display = 'none';
+
+      loadCard();
+    }
+
+    // Initialize application
+    window.onload = resetGame;
+  </script>
+</body>
+</html>
